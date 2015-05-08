@@ -55,6 +55,7 @@ cover/
 
 # Django stuff:
 *.log
+*.out
 
 # Sphinx documentation
 docs/_build/

@@ -9,7 +9,9 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'exports.settings')
 
 from django.conf import settings
 
-app = Celery('exports')
+app = Celery('exports',
+             broker='amqp://',
+             backend='amqp://')
 
 # Using a string here means the worker will not have to
 # pickle the object when using Windows.
