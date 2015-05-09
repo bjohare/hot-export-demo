@@ -21,8 +21,10 @@ from rest_framework.response import Response
 from jobs.models import Job
 
 from rest_framework.decorators import api_view, permission_classes
-from jobs.models import Job
-from serializers import (JobSerializer)
+from jobs.models import Job, ExportFormat
+from serializers import JobSerializer, ExportFormatSerializer
+
+from jobs.tasks import run_export_job
 
 
 # Get an instance of a logger
@@ -51,20 +53,39 @@ class JobViewSet(viewsets.ModelViewSet):
     
     def get_queryset(self):
         return Job.objects.all()
+
     
     def create(self, request, *args, **kwargs):
-        data = {}
-        data['name'] = request.DATA['name']
-        serializer = JobSerializer(data=data, context={'request': request})
-        job = None
+        formats = request.data.getlist('formats')
+        logger.debug(formats)
+        serializer = JobSerializer(data=request.data, context={'request': request})
         if (serializer.is_valid()):
             job = serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
+            # add the export formats
+            for id in formats:
+                export_format = ExportFormat.objects.get(id=id)
+                job.formats.add(export_format)
+            # now add the job to the queue..
+            # could have logic here to determine which queue to send the job to..
+            res = run_export_job.delay(job.id)
+            task_id = res.id
+            job.task_id = task_id
+            job.status = res.state
+            job.save()
+            running = JobSerializer(job)
+            return Response(running.data, status=status.HTTP_201_CREATED)
         else:
             logger.debug(serializer.errors)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)  
         
 
+class ExportFormatViewSet(viewsets.ModelViewSet):
+    
+    serializer_class = ExportFormatSerializer
+    permission_classes = (permissions.AllowAny,)
+    parser_classes = (FormParser,)
+    queryset = ExportFormat.objects.all()
+    
     
     
 

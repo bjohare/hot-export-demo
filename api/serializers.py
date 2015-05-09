@@ -2,7 +2,7 @@ import logging, pdb
 from rest_framework import serializers
 from datetime import datetime
 
-from jobs.models import Job
+from jobs.models import Job, ExportFormat
 
 from django.contrib.auth.models import User, Group
 
@@ -33,18 +33,26 @@ class UserGroupSerializer(serializers.Serializer):
     groups = GroupSerializer(many=True)
 """  
 
-class JobSerializer(serializers.Serializer):
-    """ Simple serializer to provide a subset of Route fields"""
+
+class ExportFormatSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ExportFormat
+        fields = ('id','name', 'description','cmd')
+
+
+class JobSerializer(serializers.ModelSerializer):
+    """ Job Serializer"""
     
     class Meta:
         model = Job
-        fields = ('id','name','description','created','format','status', 'user')
-        
-    def create(self, validated_data):
-        logger.debug(validated_data)
-        request = self.context['request']
-        id = request.user.id
-        user = User.objects.get(id=id)
-        return Job.objects.create(user=user, **validated_data)
+        fields = ('id','name','description','created','formats','status', 'user')
     
+    def to_internal_value(self, data):
+        request = self.context['request']
+        user = request.user
+        job_name = data['name']
+        description = data['description']
+        return {'name': job_name, 'description': description, 'user': user}
+    
+
 

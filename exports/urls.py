@@ -21,6 +21,7 @@ from api import views
 # api endpoints
 router = DefaultRouter(trailing_slash=False)
 router.register(r'jobs', views.JobViewSet, base_name='jobs')
+router.register(r'formats', views.ExportFormatViewSet, base_name='formats')
 
 urlpatterns = [
     url(r'^export/admin/', include(admin.site.urls)),
