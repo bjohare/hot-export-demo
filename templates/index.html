@@ -88,22 +88,33 @@
                         </p>
                     </div>
                     <br/>
-                    <table>
+                    <table width="100%">
                     <tr>
                     <td style="vertical-align: top; padding-right: 5em;">
                     <div>
                         Some of the benefits of <a href="http://bit.ly/1JYQGFc" target="_blank">Asynchronous Message Queues</a> include:
                         <br/><br/>
                         <ol>
-                            <li>Scalability:</li>
-                            <li>Configurability:
+                            <li>Scalability:
                                 <ul>
-                                    <li>Multiple queues processing different tasks, eg OBF v's other formats.</li>
+                                    <li>Jobs can be distributed among multiple processing servers (see diagram).</li>
                                 </ul>
                             </li>
-                            <li>Reliability:</li>
-                            <li>Visibility
-                                
+                            <li>Configurability:
+                                <ul>
+                                    <li>Multiple queues can process different tasks.</li>
+                                    <li>Tasks can be confgured to run concurrently or sequentially.</li>
+                                </ul>
+                            </li>
+                            <li>Reliability:
+                                <ul>
+                                    <li>Eliminates the need to poll the database and avoids deadlocks and race conditions</li>
+                                </ul>
+                            </li>
+                            <li>Visibility:
+                                <ul>
+                                    <li></li>
+                                </ul>
                             </li>
                         </ol>
                     </div>
