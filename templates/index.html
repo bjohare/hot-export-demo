@@ -65,15 +65,49 @@
             <!-- Content -->
             <div id="content">
                 <div class="content-main">
+                    <br/>
                     <div class="page-header">
                         <h1>HOT Export Tool Demo Implementation</h1>
                     </div>
+                    <br/>
                     <div>
+                        <p>
                         This demo makes use of the <a href="http://www.celeryproject.org/" target="_blank">Celery Distributed Task Queue</a> to run dummy HOT Export <a href="/api/jobs">Jobs</a>.
-                        Jobs can be configured to export a number of <a href="/api/formats">ExportFormat</a>'s. Jobs are sent directly to the Celery Task Queue for processing. Once the task completes the job status is updated.
-                        This implementation is intended to demonstrate how the issue of queueing <a href="/api/formats/1">OBF ExportFormat</a> jobs in particular can be managed.
+                        Jobs can be configured to export to a number of <a href="/api/formats">ExportFormat</a>'s.
+                        On creation, Jobs are sent directly to the Task Queue for processing.
+                        Once the task completes the job status is updated.
+                        This implementation is intended to demonstrate how the issue of queueing <a href="/api/formats/1">OBF ExportFormat</a> jobs in particular could be managed.
+                        </p>
+                        <p>
+                        As outlined in my <a href="/media/BrianOHare-HOT-Export-Proposal.pdf">proposal</a>, the generation of .obf
+                        files is a memory intensive process. On a two core machine with 4GB ram the generation
+                        of an .obf file for Liberia (20MB) took 2 minutes using 2.5GB ram and resulted in a 30
+                        MB .obf file. The bounding box for Liberia is currently smaller than the area allowed for
+                        selection in the current export tool. While the memory use of the jvm can be reduced, if
+                        several of these jobs are run in parallel, a machine with 4GB ram will potentially run out of
+                        memory. The current implementation which uses the database as a queue offers no control over the number of concurrent export jobs.
+                        It simply polls the database every five seconds looking for new jobs and starts a export process regardless of whether the resources are available.
+                        
+                        The use of an asynchronous message queue provides a reliable, scalable solution to this problem.
+                        </p>
                     </div>
-                    
+                    <br/>
+                    <div>
+                        Some of the benefits of <a href="http://bit.ly/1JYQGFc" target="_blank">Asynchronous Message Queues</a> include:
+                        <ol>
+                            <li>Scalability:</li>
+                            <li>Configurability:
+                                <ul>
+                                    <li>Multiple queues processing different tasks, eg OBF v's other formats.</li>
+                                </ul>
+                            </li>
+                            <li>Reliability:</li>
+                            <li>Visibility
+                                
+                            </li>
+                        </ol>
+                        
+                    </div>
                     
                 </div>
 
