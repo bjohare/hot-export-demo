@@ -31,21 +31,41 @@ class UserGroupSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     username = serializers.CharField()
     groups = GroupSerializer(many=True)
-"""  
+"""
+
+class UserSerializer(serializers.Serializer):
+    id = serializers.IntegerField()
 
 
-class ExportFormatSerializer(serializers.ModelSerializer):
+class ExportFormatSerializer(serializers.HyperlinkedModelSerializer):
+    
+    url = serializers.HyperlinkedIdentityField(
+       view_name='api:formats-detail',
+    )
+        
     class Meta:
         model = ExportFormat
-        fields = ('id','name', 'description','cmd')
+        fields = ('id','url','name', 'description','cmd') 
 
 
 class JobSerializer(serializers.ModelSerializer):
     """ Job Serializer"""
     
+    """
+    formats = serializers.HyperlinkedRelatedField(
+        view_name='api:formats-detail',
+        many=True,
+        queryset = ExportFormat.objects.all()
+    )
+    """
+    
+    url = serializers.HyperlinkedIdentityField(
+        view_name='api:jobs-detail',
+    )
+    
     class Meta:
         model = Job
-        fields = ('id','name','description','created','formats','status', 'user')
+        fields = ('id','name','url','description','created','formats','status')
     
     def to_internal_value(self, data):
         request = self.context['request']

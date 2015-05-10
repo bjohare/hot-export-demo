@@ -15,8 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
+from django.views.generic import TemplateView
 from rest_framework.routers import DefaultRouter
 from api import views
+
 
 # api endpoints
 router = DefaultRouter(trailing_slash=False)
@@ -24,7 +26,8 @@ router.register(r'jobs', views.JobViewSet, base_name='jobs')
 router.register(r'formats', views.ExportFormatViewSet, base_name='formats')
 
 urlpatterns = [
-    url(r'^export/admin/', include(admin.site.urls)),
-    url(r'^export/api/', include(router.urls, namespace='api')),
-    url(r'^export/api/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^admin/', include(admin.site.urls)),
+    url(r'^api/', include(router.urls, namespace='api')),
+    url(r'^api/', include('rest_framework.urls', namespace='rest_framework')),
+    url(r'^$', TemplateView.as_view(template_name='index.html')),
 ]

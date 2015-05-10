@@ -72,7 +72,7 @@ class JobViewSet(viewsets.ModelViewSet):
             job.task_id = task_id
             job.status = res.state
             job.save()
-            running = JobSerializer(job)
+            running = JobSerializer(job, context={'request': request})
             return Response(running.data, status=status.HTTP_201_CREATED)
         else:
             logger.debug(serializer.errors)
@@ -80,6 +80,7 @@ class JobViewSet(viewsets.ModelViewSet):
         
 
 class ExportFormatViewSet(viewsets.ModelViewSet):
+    """ExportFormat API endpoint."""
     
     serializer_class = ExportFormatSerializer
     permission_classes = (permissions.AllowAny,)

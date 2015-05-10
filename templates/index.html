@@ -1,0 +1,94 @@
+{% extends "rest_framework/base.html" %}
+{% load url from future %}
+{% load staticfiles %}
+{% load rest_framework %}
+<!DOCTYPE html>
+<html>
+    <head>
+        {% block head %}
+
+            {% block meta %}
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+                <meta name="robots" content="NONE,NOARCHIVE" />
+            {% endblock %}
+
+            <title>{% block title %}HOT Export API{% endblock %}</title>
+
+            {% block style %}
+                {% block bootstrap_theme %}
+                    <link rel="stylesheet" type="text/css" href="{% static "rest_framework/css/bootstrap.min.css" %}"/>
+                    <link rel="stylesheet" type="text/css" href="{% static "rest_framework/css/bootstrap-tweaks.css" %}"/>
+                {% endblock %}
+                <link rel="stylesheet" type="text/css" href="{% static "rest_framework/css/prettify.css" %}"/>
+                <link rel="stylesheet" type="text/css" href="{% static "rest_framework/css/default.css" %}"/>
+                <link rel="stylesheet" type="text/css" href="{% static "css/style.css" %}"/>
+            {% endblock %}
+
+        {% endblock %}
+    </head>
+
+    {% block body %}
+    <body class="{% block bodyclass %}{% endblock %}">
+
+        <div class="wrapper">
+
+            {% block navbar %}
+                <div class="navbar navbar-static-top {% block bootstrap_navbar_variant %}navbar-inverse{% endblock %}">
+                    <div class="container">
+                        <span>
+                            {% block branding %}
+                                <a class='navbar-brand' rel="nofollow" href="#">
+                                    HOT Export API Demo
+                                </a>
+                            {% endblock %}
+                        </span>
+                        
+                        <ul class="nav navbar-nav">
+                          <li class="active"><a href="api">API</a></li>
+                          <li><a href="/media/BrianOHare-HOT-Export-Proposal.pdf">Export Tool Proposal</a></li>
+                        </ul>
+                        
+                        <ul class="nav navbar-nav pull-right">
+                            {% block userlinks %}
+                                {% if user.is_authenticated %}
+                                    {% optional_logout request user %}
+                                {% else %}
+                                    {% optional_login request %}
+                                {% endif %}
+                            {% endblock %}
+                        </ul>
+                    </div>
+                </div>
+            {% endblock %}
+
+            <div class="container">
+            <!-- Content -->
+            <div id="content">
+                <div class="content-main">
+                    <div class="page-header">
+                        <h1>HOT Export Tool Demo Implementation</h1>
+                    </div>
+                    <div>
+                        This demo makes use of the <a href="http://www.celeryproject.org/" target="_blank">Celery Distributed Task Queue</a> to run dummy HOT Export <a href="/api/jobs">Jobs</a>.
+                        Jobs can be configured to export a number of <a href="/api/formats">ExportFormat</a>'s. Jobs are sent directly to the Celery Task Queue for processing. Once the task completes the job status is updated.
+                        This implementation is intended to demonstrate how the issue of queueing <a href="/api/formats/1">OBF ExportFormat</a> jobs in particular can be managed.
+                    </div>
+                    
+                    
+                </div>
+
+            
+            </div>
+            <!-- END Content -->
+            </div><!-- /.container -->
+        </div><!-- ./wrapper -->
+
+        {% block script %}
+            <script src="{% static "rest_framework/js/jquery-1.8.1-min.js" %}"></script>
+            <script src="{% static "rest_framework/js/bootstrap.min.js" %}"></script>
+            <script src="{% static "rest_framework/js/prettify-min.js" %}"></script>
+            <script src="{% static "rest_framework/js/default.js" %}"></script>
+        {% endblock %}
+    </body>
+    {% endblock %}
+</html>
