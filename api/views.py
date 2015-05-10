@@ -66,10 +66,9 @@ class JobViewSet(viewsets.ModelViewSet):
                 export_format = ExportFormat.objects.get(id=id)
                 job.formats.add(export_format)
             # now add the job to the queue..
-            # could have logic here to determine which queue to send the job to..
+            # could have logic here to determine which task to run
             res = run_export_job.delay(job.id)
-            task_id = res.id
-            job.task_id = task_id
+            job.task_id = res.id
             job.status = res.state
             job.save()
             running = JobSerializer(job, context={'request': request})

@@ -98,22 +98,29 @@
                             <li>Scalability:
                                 <ul>
                                     <li>Jobs can be distributed among multiple processing servers (see diagram).</li>
+                                    <li>Its easy to add additional processors.</li>
                                 </ul>
                             </li>
-                            <li>Configurability:
+                            <li>Flexibility:
                                 <ul>
-                                    <li>Multiple queues can process different tasks.</li>
+                                    <li>Multiple queues can process different tasks, e.g. OBF or Default Export Jobs (see diagram)</li>
                                     <li>Tasks can be confgured to run concurrently or sequentially.</li>
+                                    <li>Tasks can be prioritized.</li>
+                                    <li>Configurable workflow using sub-tasks.</li>
                                 </ul>
                             </li>
-                            <li>Reliability:
+                            <li>Performance / Reliability:
                                 <ul>
-                                    <li>Eliminates the need to poll the database and avoids deadlocks and race conditions</li>
+                                    <li>Eliminates the need to poll the database and avoids deadlocks and race conditions.</li>
+                                    <li>Message queue lives in memory which avoids the disk I/O involved in polling the database.</li>
+                                    <li>Tasks are committed to disk on system failure and resumed at reboot.</li>
+                                    <li>Tasks run instantly rather than being delayed by a database polling interval.</li>
+                                    <li>Tasks can be retried if they fail.</li>
                                 </ul>
                             </li>
                             <li>Visibility:
                                 <ul>
-                                    <li></li>
+                                    <li>Task <a href="http://hotmon.geoweb.io" target="_blank">monitoring tools</a> can provide greater insight into task and queue performance.</li>
                                 </ul>
                             </li>
                         </ol>
